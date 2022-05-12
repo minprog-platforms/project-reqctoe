@@ -7,9 +7,6 @@ from random import random
 from statistics import NormalDist
 from math import sqrt
 
-# class Food(Agent):
-#     pass
-
 class Cats(Agent):
 
     HUNGER_THRESHOLD = 1/2
@@ -17,7 +14,6 @@ class Cats(Agent):
     def __init__(self, age, colony, range):
         self.age = age
         self.fertile = True
-        # self.colony = colony
         self.trapped = False
         self.colony_center = (6,6)
         self.max_distance = range
@@ -129,10 +125,12 @@ class Home(Agent):
 
 class CatModel(Model):
     
-    def __init__(self, C, H, T):
+    def __init__(self, C, H, T, width, height):
         self.num_cats = C
         self.num_homes = H
         # self.num_traps = T
+        self.grid = MultiGrid(width, height, True)
+        self.schedule = RandomActivation(self)
 
         for i in range(self.num_cats):
             a = Cats(i, self)
