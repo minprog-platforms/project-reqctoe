@@ -1,6 +1,11 @@
+from mesa import Agent
+from Agents.cats import Cats
+from random import random 
+
 class Trap(Agent):
 
-    def __init__(self, home, cell):
+    def __init__(self, unique_id, model, cell):
+        super().__init__(unique_id, model)
         # self.home = home
         self.location = cell
         self.chance = random()
@@ -16,14 +21,15 @@ class Trap(Agent):
 
 class Home(Agent):
     
-    def __init__(self, T):
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
         self.count = 0
         self.num_food = random()*10
-        self.num_traps = T
+        self.num_traps = 2
         self.traps = []
-        for trap in self.num_traps:
+        for trap in range(self.num_traps):
             cell = 0
-            self.traps.append(Trap(self, cell))
+            self.traps.append(Trap(self, unique_id, cell))
             
     def step(self):
         self.count += 1

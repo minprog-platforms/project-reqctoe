@@ -1,14 +1,17 @@
+from mesa import Agent
+
 class Cats(Agent):
 
     HUNGER_THRESHOLD = 1/2
 
-    def __init__(self, age, colony, range):
-        self.age = age
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
+        self.age = 0
         self.fertile = True
         # self.colony = colony
         self.trapped = False
         self.colony_center = (6,6)
-        self.max_distance = range
+        self.max_distance = 5
         self.hunger = 0
 
     def kittens(self):
