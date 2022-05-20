@@ -1,6 +1,7 @@
 from mesa import Agent
+import Agents.homes as homes
 
-class Cats(Agent):
+class Cat(Agent):
 
     HUNGER_THRESHOLD = 1/2
 
@@ -22,13 +23,13 @@ class Cats(Agent):
         # iterate through agents
         for agent in agents:
             # eating
-            if type(agent) == Home:
+            if type(agent) == homes.Home:
                 if agent.num_food > 0:
                     agent.num_food-= self.hunger
                     self.hunger = 0
             # mating
-            elif self.fertile == True:
-                if type(agent) == Cats and agent is not self:
+            elif self.fertile:
+                if type(agent) == Cat and agent is not self:
                     if agent.fertile:
                         # neuken :)
                         pass

@@ -8,7 +8,7 @@ if __name__ == "__main__":
     height = 15
 
     model = CatModel(cats, homes, width, height)
-    for i in range(1000):
+    for _ in range(1000):
         model.step()
 
     agent_counts = np.zeros((model.grid.width, model.grid.height))
