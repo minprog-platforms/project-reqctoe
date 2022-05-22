@@ -1,5 +1,9 @@
 from mesa import Agent
 import Agents.homes as homes
+from math import sqrt
+from statistics import NormalDist
+from uuid import uuid4
+from random import random 
 
 class Cat(Agent):
 
@@ -7,6 +11,7 @@ class Cat(Agent):
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+        self.model = model
         self.age = 0
         self.fertile = True
         # self.colony = colony
@@ -17,6 +22,12 @@ class Cat(Agent):
 
     def kittens(self):
         # hier moet een functie komen die nieuwe agents creeert 
+        id = uuid4()
+        cat = Cat(id, self.model)
+        self.model.schedule.add(cat)
+        self.model.grid.place_agent(cat, self.colony_center)
+
+        # model.grid
         pass
 
     def interact(self, agents):
@@ -30,8 +41,9 @@ class Cat(Agent):
             # mating
             elif self.fertile:
                 if type(agent) == Cat and agent is not self:
-                    if agent.fertile:
-                        # neuken :)
+                    if agent.fertile and random() < 0.01:
+                        print("kitten!")
+                        self.kittens()
                         pass
     
     # Movement 
@@ -52,8 +64,8 @@ class Cat(Agent):
 
         # random walking
         if self.hunger > self.HUNGER_THRESHOLD:
-            new_pos = random.choice(possible_steps)
-            self.model.move_agent(self, new_pos)
+            new_pos = self.random.choice(possible_steps)
+            self.model.grid.move_agent(self, new_pos)
         # Normal wandering
         else:
             # calculate weights based on normal distribution
@@ -63,7 +75,8 @@ class Cat(Agent):
                 weights.append(weight)
 
             # take weighted step
-            new_pos = random.choices(possible_steps, weights=weights, k=1)[0]
+            new_pos = self.random.choices(possible_steps, weights=weights, k=1)[0]
+            print(new_pos)
             self.model.grid.move_agent(self, new_pos)
 
 
@@ -79,5 +92,4 @@ class Cat(Agent):
         elif len(cell_contents) > 1:
             self.interact(cell_contents)
         # movement
-        else:
-            self.move()
+        self.move()

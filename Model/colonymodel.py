@@ -34,6 +34,7 @@ class CatModel(Model):
                 id = int(uuid4())
                 trap = Trap(id, self)
                 self.schedule.add(trap)
+                self.grid.place_agent(trap,(x,y))
                 home.traps.append(trap)
 
 

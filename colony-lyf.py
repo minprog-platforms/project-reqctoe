@@ -1,5 +1,6 @@
 from Model.colonymodel import CatModel
 import numpy as np
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     cats = 15
@@ -8,7 +9,7 @@ if __name__ == "__main__":
     height = 15
 
     model = CatModel(cats, homes, width, height)
-    for _ in range(1000):
+    for _ in range(100):
         model.step()
 
     agent_counts = np.zeros((model.grid.width, model.grid.height))
@@ -19,4 +20,4 @@ if __name__ == "__main__":
     plt.imshow(agent_counts, interpolation="nearest")
     plt.colorbar()
 
-    plt.save_fig()
+    plt.savefig("density.png")
