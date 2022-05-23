@@ -33,4 +33,5 @@ class Home(Agent):
             self.num_food += random()*10
         if self.count % 30 == 0:
             for trap in self.traps:
+                # TODO random trap placement with maximum dist
                 self.model.grid.move_agent(trap,(4,6))

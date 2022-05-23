@@ -9,11 +9,12 @@ from uuid import uuid4
 
 class CatModel(Model):
     
-    def __init__(self, C, H, width, height):
+    def __init__(self, cats, homes, width, height):
         # super().__init_()
+        self.running = True
         self.colony_center = (round(width/2), round(height/2))
-        self.num_cats = C
-        self.num_homes = H
+        self.num_cats = cats
+        self.num_homes = homes
         self.grid = MultiGrid(width, height, True)
         self.schedule = BaseScheduler(self)
 

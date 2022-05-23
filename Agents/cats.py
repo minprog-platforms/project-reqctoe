@@ -17,14 +17,21 @@ class Cat(Agent):
         # self.colony = colony
         self.trapped = False
         self.colony_center = (6,6)
-        self.max_distance = 5
+        self.max_distance = 50
         self.hunger = 0
+    
+    @property
+    def hungry(self):
+        return self.hunger > self.HUNGER_THRESHOLD
 
-    def kittens(self):
+    def make_kittens(self):
         # hier moet een functie komen die nieuwe agents creeert 
         id = uuid4()
         cat = Cat(id, self.model)
+        # anders
+        cat.fertile = False
         self.model.schedule.add(cat)
+        # TODO place cat at posotion of parent
         self.model.grid.place_agent(cat, self.colony_center)
 
         # model.grid
@@ -41,16 +48,16 @@ class Cat(Agent):
             # mating
             elif self.fertile:
                 if type(agent) == Cat and agent is not self:
-                    if agent.fertile and random() < 0.01:
+                    if agent.fertile and random() < 0.010:
                         print("kitten!")
-                        self.kittens()
-                        pass
+                        self.make_kittens()
+                    pass
     
     # Movement 
     def move(self):
         # retrieve neighboring cells
         neighborhood = self.model.grid.get_neighborhood(
-            self.pos, moore=False, include_center=False)
+            self.pos, moore=True, include_center=False)
         possible_steps = []
         distances = []
 
@@ -62,34 +69,38 @@ class Cat(Agent):
                 possible_steps.append(step)
                 distances.append(distance)
 
-        # random walking
-        if self.hunger > self.HUNGER_THRESHOLD:
-            new_pos = self.random.choice(possible_steps)
-            self.model.grid.move_agent(self, new_pos)
-        # Normal wandering
-        else:
-            # calculate weights based on normal distribution
-            weights = []
-            for r in distances:
-                weight = 1 - NormalDist(mu=0, sigma=1).cdf(r)
+        
+        # calculate weights based on normal distribution
+        weights = []
+        for r in distances:
+            weight = NormalDist(mu=0, sigma=1).cdf(r)
+            if self.hunger > self.HUNGER_THRESHOLD:
+                # Away from colony
                 weights.append(weight)
+            else:
+                # Towards colony
+                weights.append(1 - weight)
 
-            # take weighted step
-            new_pos = self.random.choices(possible_steps, weights=weights, k=1)[0]
-            print(new_pos)
-            self.model.grid.move_agent(self, new_pos)
+
+        # take weighted step
+        new_pos = self.random.choices(possible_steps, weights=weights, k=1)[0]
+        print(new_pos)
+        self.model.grid.move_agent(self, new_pos)
 
 
     def step(self):
         # increase hunger and analyse location contents
-        self.hunger += 0.01
+        self.hunger += 0.05
         cell_contents = self.model.grid.get_cell_list_contents([self.pos])
         
         # no actions when trapped
         if self.trapped:
             self.trapped = False
+            return
+
         # interaction with other agents
-        elif len(cell_contents) > 1:
+        if len(cell_contents) > 1:
             self.interact(cell_contents)
+        
         # movement
         self.move()
