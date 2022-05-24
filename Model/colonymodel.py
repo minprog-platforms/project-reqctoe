@@ -31,7 +31,7 @@ class CatModel(Model):
             # dit staat nu nog toe dat er huizen op dezelfde plek zijn
             self.grid.place_agent(home,(x,y))
             
-            for _ in range(2):
+            for _ in range(1):
                 id = int(uuid4())
                 trap = Trap(id, self)
                 self.schedule.add(trap)
@@ -43,7 +43,7 @@ class CatModel(Model):
         for _ in range(self.num_homes, self.num_homes + self.num_cats):
             # make the cats
             id = int(uuid4())
-            cat = Cat(id, self)
+            cat = Cat(id, self, self.colony_center)
             self.schedule.add(cat)
 
             # place cats at center

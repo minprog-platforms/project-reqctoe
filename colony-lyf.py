@@ -9,7 +9,7 @@ from mesa.visualization.ModularVisualization import ModularServer
 
 def agent_portrayal(agent):
     portrayal = {"Shape": "circle",
-                 "Color": "red",
+                 "Color": "green",
                  "Filled": "true",
                  "Layer": 0,
                  "r": 0.5}
@@ -21,21 +21,26 @@ def agent_portrayal(agent):
             portrayal["Color"] = "blue"
 
     if type(agent) == Home:
-        portrayal["Shape"] = "square"
+        portrayal["Shape"] = "rect"
+        portrayal["w"] = 0.5
+        portrayal["h"] = 0.5
 
     if type(agent) == Trap:
-        portrayal["Shape"] = "square"
+        portrayal["Shape"] = "rect"
+        portrayal["w"] = 0.8
+        portrayal["h"] = 0.5
+        portrayal["Color"] = "black"
 
 
     return portrayal
 
 
 if __name__ == "__main__":
-    width = 10
-    height = 15
+    width = 20
+    height = 25
     params = {
-        "cats": 15,
-        "homes": 10,
+        "cats": 5,
+        "homes": 50,
         "width": width,
         "height": height,
     }

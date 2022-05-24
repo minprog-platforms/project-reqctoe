@@ -12,7 +12,7 @@ class Trap(Agent):
         # chance of trapping and neutering when cat in same cell
         cell_contents = self.model.grid.get_cell_list_contents([self.pos])
         for agent in cell_contents:
-            if type(agent) == cats.Cat and random() < self.chance:
+            if type(agent) == cats.Cat and agent.fertile and random() < self.chance:
                 agent.trapped = True
                 agent.fertile = False
 
