@@ -12,6 +12,7 @@ class CatModel(Model):
     def __init__(self, cats, homes, width, height):
         # super().__init_()
         self.running = True
+        # TODO optioneel verschillende kolonieën met verschillende center/ center ook randomly generated maken
         self.colony_center = (round(width/2), round(height/2))
         self.num_cats = cats
         self.num_homes = homes
@@ -31,6 +32,7 @@ class CatModel(Model):
             # dit staat nu nog toe dat er huizen op dezelfde plek zijn
             self.grid.place_agent(home,(x,y))
             
+            # TODO # traps laten variëren en op plek weg van huis plaatsen
             for _ in range(1):
                 id = int(uuid4())
                 trap = Trap(id, self)
@@ -53,6 +55,9 @@ class CatModel(Model):
         #     model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}
         # )
 
+    # def kill_agent(self, agent):
+    #     self.schedule.remove(agent)
+    #     self.grid.remove_agent(agent)
 
     def step(self):
         # self.datacollector.collect(self)

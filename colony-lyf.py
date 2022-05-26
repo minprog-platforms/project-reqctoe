@@ -8,6 +8,7 @@ from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 
 def agent_portrayal(agent):
+    # TODO plaatjes toevoegen voor alle agents
     portrayal = {"Shape": "circle",
                  "Color": "green",
                  "Filled": "true",
@@ -39,8 +40,8 @@ if __name__ == "__main__":
     width = 20
     height = 25
     params = {
-        "cats": 5,
-        "homes": 50,
+        "cats": 50,
+        "homes": 30,
         "width": width,
         "height": height,
     }

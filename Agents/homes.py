@@ -14,7 +14,8 @@ class Trap(Agent):
         for agent in cell_contents:
             if type(agent) == cats.Cat and agent.fertile and random() < self.chance:
                 agent.trapped = True
-                agent.fertile = False
+                agent.neutered = True
+                return
 
 
 class Home(Agent):
@@ -34,4 +35,5 @@ class Home(Agent):
         if self.count % 30 == 0:
             for trap in self.traps:
                 # TODO random trap placement with maximum dist
+                
                 self.model.grid.move_agent(trap,(4,6))
