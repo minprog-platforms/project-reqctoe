@@ -1,9 +1,8 @@
 from Agents.cats import Cat
 from Agents.homes import Home, Trap
-from Model.colonymodel import CatModel
-import numpy as np
-import matplotlib.pyplot as plt
-# from Agents.cats import Cat
+from Models.colony import ColonyModel
+# import numpy as np
+# import matplotlib.pyplot as plt
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 
@@ -32,7 +31,6 @@ def agent_portrayal(agent):
         portrayal["h"] = 0.5
         portrayal["Color"] = "black"
 
-
     return portrayal
 
 
@@ -40,14 +38,14 @@ if __name__ == "__main__":
     width = 20
     height = 25
     params = {
-        "cats": 50,
+        "cats": 75,
         "homes": 30,
         "width": width,
         "height": height,
     }
     grid = CanvasGrid(agent_portrayal, width, height, 500, round(500*height/width))
 
-    server = ModularServer(CatModel,
+    server = ModularServer(ColonyModel,
                        [grid],
                        "Cat Model",
                        params)

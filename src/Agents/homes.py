@@ -22,9 +22,10 @@ class Home(Agent):
     
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+        self.model = model
         self.count = 0
         self.num_food = random()*10
-        self.num_traps = 2
+        self.trap_dist = 0
         self.traps = []
 
             
@@ -35,5 +36,6 @@ class Home(Agent):
         if self.count % 30 == 0:
             for trap in self.traps:
                 # TODO random trap placement with maximum dist
-                
-                self.model.grid.move_agent(trap,(4,6))
+                x = self.random.randrange(self.model.grid.width)
+                y = self.random.randrange(self.model.grid.height)
+                self.model.grid.move_agent(trap,(x,y))

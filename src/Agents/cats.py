@@ -34,19 +34,25 @@ class Cat(Agent):
     
     @property
     def dead(self):
-        # premature disease death
+        # different life expectancy based on fertility
+        if self.fertile:
+            avg_age = 100
+        else:
+            avg_age = 400
+
+        # kitten disease death
         if self.age < 12 and random() < 0.05:
-            print("disease")
+            # TODO print("disease")
             pass
         
         # death from old age
-        elif self.age > 100 and random() < 0.05:
-            print("old age")
+        elif self.age > avg_age and random() < 0.05:
+            # TODO print("old age")
             pass
 
         # death from hunger
         elif self.hunger > 2.5:
-            print("starved")
+            # TODO print("starved")
             pass
         
         # still alive 
@@ -64,15 +70,16 @@ class Cat(Agent):
         self.mating = 5
         mate.mating = 1
 
-        litter = choice(range(2,5))
-        print(litter)
+        litter = choice(range(2,7))
+        # TODO temporary print
+        # print(litter)
         for _ in range(litter):
             id = uuid4()
             cat = Cat(id, self.model, self.colony_center)
 
             # plaats kat en voeg toe aan planning
             self.model.schedule.add(cat)
-            # TODO place cat at position of parent
+            # place cat at position of parent
             self.model.grid.place_agent(cat, self.pos)
 
     def interact(self, agents):
@@ -90,14 +97,12 @@ class Cat(Agent):
                     else:
                         self.hunger -= agent.num_food
                         agent.num_food = 0
+                        print("empty!")
                     # TODO move colony center
             # mating
             elif self.fertile:
                 if type(agent) == Cat and agent is not self:
                     if agent.fertile and random() < 0.01:
-
-                        # TODO temporary print
-                        print("kittens!")
 
                         self.make_kittens(agent)
                         return
@@ -112,6 +117,7 @@ class Cat(Agent):
 
         # check if steps allowed 
         for step in neighborhood:
+            distance = self.get_distance()
             distance = (self.colony_center[0] - step[0])**2 + (self.colony_center[1] - step[1])**2
             distance = sqrt(distance)
             if distance <= self.max_distance:

@@ -5,12 +5,13 @@ from mesa.datacollection import DataCollector
 from Agents.homes import Home, Trap
 from Agents.cats import Cat
 from uuid import uuid4
+from random import random
 
 
-class CatModel(Model):
+class ColonyModel(Model):
     
     def __init__(self, cats, homes, width, height):
-        # super().__init_()
+        # TODO super().__init_()
         self.running = True
         # TODO optioneel verschillende kolonieën met verschillende center/ center ook randomly generated maken
         self.colony_center = (round(width/2), round(height/2))
@@ -29,11 +30,13 @@ class CatModel(Model):
             # place home at random location
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
-            # dit staat nu nog toe dat er huizen op dezelfde plek zijn
+            # TODO dit staat nu nog toe dat er huizen op dezelfde plek zijn
             self.grid.place_agent(home,(x,y))
             
-            # TODO # traps laten variëren en op plek weg van huis plaatsen
-            for _ in range(1):
+            # TODO traps laten variëren en op plek weg van huis plaatsen
+            # place a variable number of traps for every home
+            num_traps = self.random.randrange(2)
+            for _ in range(num_traps):
                 id = int(uuid4())
                 trap = Trap(id, self)
                 self.schedule.add(trap)
@@ -45,19 +48,12 @@ class CatModel(Model):
         for _ in range(self.num_homes, self.num_homes + self.num_cats):
             # make the cats
             id = int(uuid4())
-            cat = Cat(id, self, self.colony_center)
+            age = self.random.randrange(150)
+            cat = Cat(id, self, self.colony_center, age)
             self.schedule.add(cat)
 
             # place cats at center
             self.grid.place_agent(cat,(self.colony_center))
-
-        # self.datacollector = DataCollector(
-        #     model_reporters={"Gini": compute_gini}, agent_reporters={"Wealth": "wealth"}
-        # )
-
-    # def kill_agent(self, agent):
-    #     self.schedule.remove(agent)
-    #     self.grid.remove_agent(agent)
 
     def step(self):
         # self.datacollector.collect(self)
