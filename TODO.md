@@ -1,0 +1,10 @@
+- Code opschonen
+- Meerdere colonies
+- Moving colonies
+- Improved visualization
+    - Chart met statistieken
+- Runnen met verschillene variabelen
+- Uitzoeken wat de eisen precies zijn
+- Reijer kussen
+    - tanden poetsen
+    - koffie zetten
