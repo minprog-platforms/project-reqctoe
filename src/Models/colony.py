@@ -4,6 +4,7 @@ from mesa.time import BaseScheduler
 from mesa.datacollection import DataCollector
 from Agents.homes import Home, Trap
 from Agents.cats import Cat
+from functions import get_distance, get_normed_diff
 from uuid import uuid4
 from random import random
 
@@ -54,6 +55,17 @@ class ColonyModel(Model):
 
             # place cats at center
             self.grid.place_agent(cat,(self.colony_center))
+
+
+    # move colony center according to found food locations
+    def move_colony(self, pos):
+        # displace one cell toward location of food
+        direction = get_normed_diff(self.colony_center, pos)
+        x = self.colony_center[0] + round(direction[0])
+        y = self.colony_center[1] + round(direction[1])
+
+        self.colony_center = (x,y)
+
 
     def step(self):
         # self.datacollector.collect(self)
