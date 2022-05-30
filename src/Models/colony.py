@@ -11,46 +11,48 @@ from random import random
 
 class ColonyModel(Model):
     
-    def __init__(self, cats, homes, width, height):
-        # TODO super().__init_()
+    def __init__(self, cats, homes, traps, width, height):
         self.running = True
-        # TODO optioneel verschillende kolonieën met verschillende center/ center ook randomly generated maken
         self.colony_center = (round(width/2), round(height/2))
         self.num_cats = cats
         self.num_homes = homes
+        self.max_traps = traps
         self.grid = MultiGrid(width, height, True)
         self.schedule = BaseScheduler(self)
 
-        # huis trap trap, huis trap trap
         for _ in range(self.num_homes):
-           
-            id = int(uuid4())
-            home = Home(id,self)
+            # create home agent
+            home = Home(uuid4(), self)
             self.schedule.add(home)
             
-            # place home at random location
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
-            # TODO dit staat nu nog toe dat er huizen op dezelfde plek zijn
+            found_empty_pos = False
+            while not found_empty_pos:
+                # generate random location
+                x = self.random.randrange(self.grid.width)
+                y = self.random.randrange(self.grid.height)
+                
+                # check if cell empty
+                if len(self.grid.get_cell_list_contents((x,y))) == 0:
+                    found_empty_pos = True
+
+            # place home in found empty spot
             self.grid.place_agent(home,(x,y))
             
-            # TODO traps laten variëren en op plek weg van huis plaatsen
             # place a variable number of traps for every home
-            num_traps = self.random.randrange(2)
+            num_traps = self.random.randrange(self.max_traps)
             for _ in range(num_traps):
-                id = int(uuid4())
-                trap = Trap(id, self)
-                self.schedule.add(trap)
-                self.grid.place_agent(trap,(x,y))
+                trap = Trap(uuid4(), self)
                 home.traps.append(trap)
 
+                self.schedule.add(trap)
+                self.grid.place_agent(trap,(x,y))
 
-        # scheduler na alle homes en traps
+
+        # create cat agents
         for _ in range(self.num_homes, self.num_homes + self.num_cats):
             # make the cats
-            id = int(uuid4())
             age = self.random.randrange(150)
-            cat = Cat(id, self, self.colony_center, age)
+            cat = Cat(uuid4(), self, self.colony_center, age)
             self.schedule.add(cat)
 
             # place cats at center
@@ -68,5 +70,6 @@ class ColonyModel(Model):
 
 
     def step(self):
-        # self.datacollector.collect(self)
+        # TODO self.datacollector.collect(self)
         self.schedule.step()
+        print(self.schedule.get_agent_count())
