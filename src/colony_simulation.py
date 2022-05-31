@@ -51,8 +51,8 @@ def agent_portrayal(agent):
     # trap alterations
     elif type(agent) == Trap:
         portrayal["Shape"] = "rect"
-        portrayal["w"] = 0.8
-        portrayal["h"] = 0.5
+        portrayal["w"] = 0.7
+        portrayal["h"] = 0.3
         portrayal["Color"] = "black"
 
     return portrayal
