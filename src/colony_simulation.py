@@ -8,10 +8,7 @@ the visualization of the results.
 
 """
 
-import matplotlib.pyplot as plt
-import numpy as np
 from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.TextVisualization import TextData
 from mesa.visualization.modules import CanvasGrid, ChartModule
 from mesa.visualization.UserParam import UserSettableParameter
 
