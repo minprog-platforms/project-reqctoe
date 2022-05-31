@@ -1,3 +1,11 @@
+"""
+homes.py
+Programmeerproject
+Eline van de Lagemaat (11892900)
+
+TODO
+"""
+
 from mesa import Agent
 import Agents.cats as cats
 from functions import get_distance
@@ -5,6 +13,7 @@ from random import random
 
 
 class Trap(Agent):
+    """TODO agent description"""
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
@@ -12,17 +21,21 @@ class Trap(Agent):
 
 
     def step(self):
-        # chance of trapping and neutering when cat in same cell
+        """Trap cat agents in same cell and neuter them"""
+        # retrieve agents in same cell
         cell_contents = self.model.grid.get_cell_list_contents([self.pos])
         for agent in cell_contents:
+            # try to neuter found cats
             if type(agent) == cats.Cat and agent.fertile and random() < self.chance:
                 agent.trapped = True
                 agent.neutered = True
+                # neuter only one cat per step
                 return
 
 
 class Home(Agent):
-    
+    """TODO agent description"""
+
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
         self.model = model
@@ -33,6 +46,7 @@ class Home(Agent):
 
 
     def move_trap(self, trap):
+        """Move traps belonging to current home"""
         found_empty_pos = False
 
         # generate new location and check if allowed
@@ -40,13 +54,16 @@ class Home(Agent):
             x = self.random.randrange(self.model.grid.width)
             y = self.random.randrange(self.model.grid.height)
 
+            # requirements for new location
             if len(self.model.grid.get_cell_list_contents((x,y))) == 0 and (get_distance(self.pos, (x,y)) < self.trap_dist):
                 found_empty_pos = True
 
         self.model.grid.move_agent(trap,(x,y))
             
 
+
     def step(self):
+        """"TODO function description"""
         self.count += 1
         # regularly put out food
         if self.count % 5 == 0:

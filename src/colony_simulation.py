@@ -1,3 +1,11 @@
+"""
+colony_simulation.py
+Programmeerproject
+Eline van de Lagemaat (11892900)
+
+TODO
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from mesa.visualization.ModularVisualization import ModularServer
@@ -9,7 +17,7 @@ from Models.colony import ColonyModel
 
 
 def agent_portrayal(agent):
-    # TODO plaatjes toevoegen voor alle agents
+    """TODO function description"""
     portrayal = {"Shape": "circle",
                  "Color": "green",
                  "Filled": "true",
@@ -21,6 +29,9 @@ def agent_portrayal(agent):
 
         if agent.hungry:
             portrayal["Color"] = "blue"
+
+        if agent.fertile:
+            portrayal["Filled"] = "false"
 
     elif type(agent) == Home:
         portrayal["Shape"] = "rect"
@@ -37,30 +48,34 @@ def agent_portrayal(agent):
 
 
 if __name__ == "__main__":
-
     runmode = "server"
 
+    # parameters for running model
     width = 30
     height = 30
     params = {
-        "cats": 15,
+        "cats": 40,
         "homes": 75,
         "traps": 2,
         "width": width,
         "height": height,
     }
 
+    # animated visualisation
     if runmode == "server":
         grid = CanvasGrid(agent_portrayal, width, height, 500, round(500*height/width))
 
+        # initialize server
         server = ModularServer(ColonyModel,
                         [grid],
                         "Cat Model",
                         params)
 
+        # run server
         server.port = 8521 # The default
         server.launch()
     
+    # graph type visualisation
     elif runmode == "standalone":
         model = ColonyModel(**params)
         for _ in range(100):
