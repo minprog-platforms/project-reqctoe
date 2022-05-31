@@ -3,10 +3,12 @@ colony.py
 Programmeerproject
 Eline van de Lagemaat (11892900)
 
-TODO 
+ColonyModel generates a model for a cat colony living in an urban setting.
+The model includes homes, cat traps and cats which are all called upon 
+in the step function.
 """
 
-from mesa import Model, Agent
+from mesa import Model
 from mesa.space import MultiGrid
 from mesa.time import BaseScheduler
 from mesa.datacollection import DataCollector
@@ -18,7 +20,7 @@ from random import random
 
 
 class ColonyModel(Model):
-    """TODO model description """
+    """ Model class representing an urban cat colony. """
 
     def __init__(self, cats, homes, traps, width, height):
         self.running = True
@@ -56,6 +58,7 @@ class ColonyModel(Model):
                 self.schedule.add(trap)
                 self.grid.place_agent(trap,(x,y))
 
+        # keep track of number of houses/traps
         self.num_noncat_agents = self.schedule.get_agent_count()
 
         # create cat agents
@@ -70,7 +73,7 @@ class ColonyModel(Model):
 
 
     def move_colony(self, pos):
-        """Move colony center according to found food location"""
+        """ Move colony center according to found food location."""
         direction = get_normed_diff(self.colony_center, pos)
         
         # displace one cell toward location of food
@@ -81,7 +84,7 @@ class ColonyModel(Model):
 
 
     def step(self):
-        """Call on step function of all agents on grid"""
+        """ Call on step function of all agents on grid."""
         # self.datacollector.collect(self)
         self.schedule.step()
         if not 0 < (self.schedule.get_agent_count() - self.num_noncat_agents) < 1000:

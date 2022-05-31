@@ -3,7 +3,17 @@ cats.py
 Programmeerproject
 Eline van de Lagemaat (11892900)
 
-TODO
+Creates cat agents that perform the following actions upon calling the step function:
+- Walk around
+- F*ck around
+- Eat
+- Die
+
+Walking is done according to a normal distribution centered around the colony center. 
+When hungry, cats walk away from the colony in search of food. 
+Otherwise they gravitate towards the center.
+
+Probabilities used in this file do not have a logical basis, simply what worked best in trials.
 """
 
 from mesa import Agent
@@ -15,7 +25,7 @@ from random import random, choice
 
 
 class Cat(Agent):
-    """TODO hail whlceihs"""
+    """ Agent class representing cats."""
 
     HUNGER_THRESHOLD = 0.5
 
@@ -36,19 +46,28 @@ class Cat(Agent):
 
     @property
     def hungry(self):
-        """Determine if cat is hungry"""
+        """ Determine if cat is hungry"""
         return self.hunger > self.HUNGER_THRESHOLD
 
 
     @property
     def fertile(self):
-        """Determine if cat is fertile"""
+        """ Determine if cat is fertile based on:
+            - age,
+            - neutered status,
+            - recent mating.
+        """
         return self.age > 10 and not self.neutered and self.mating < 1
     
 
     @property
     def dead(self):
-        """Determine if cat is dead and if so kill cat"""
+        """ Determine if cat is dead based on:
+            - fertility,
+            - age,
+            - hunger,
+            and if so kill cat.
+        """
         # different life expectancy based on fertility
         if self.fertile:
             avg_age = 100
@@ -76,7 +95,7 @@ class Cat(Agent):
 
 
     def make_kittens(self, mate):
-        """Generate new cat agents"""
+        """ Generate new cat agents."""
         # partners can't mate for a few steps
         self.mating = 5
         mate.mating = 1
@@ -92,10 +111,10 @@ class Cat(Agent):
 
 
     def interact(self, agents):
-        """TODO function description"""
+        """ When multiple agents are in a cell, cats can interact with them."""
         # iterate through agents in cell
         for agent in agents:
-            # eating
+            # when at location of home, try to eat something
             if type(agent) == homes.Home:
                 # check if food available
                 if agent.num_food > 0:
@@ -108,8 +127,9 @@ class Cat(Agent):
                         self.hunger -= agent.num_food
                         agent.num_food = 0
                     self.model.move_colony(self.pos)
-            # mating
+            # when other cat in same cell, try to mate
             elif self.fertile:
+                # when both cats are fertile, small chance of mating
                 if type(agent) == Cat and agent is not self:
                     if agent.fertile and random() < 0.01:
                         self.make_kittens(agent)
@@ -117,7 +137,9 @@ class Cat(Agent):
     
 
     def move(self):
-        """TODO function description"""
+        """ Every step, cat can move one cell from their current position
+            based on a normal distribution.
+        """
         # retrieve neighboring cells
         neighborhood = self.model.grid.get_neighborhood(
             self.pos, moore=True, include_center=False)
@@ -161,7 +183,9 @@ class Cat(Agent):
 
 
     def step(self):
-        """TODO function description"""
+        """ For every step cats get older and hungrier. 
+            They can die, get trapped, mate and move.
+        """
         # increase hunger and analyse location contents
         self.hunger += 0.05
         self.age += 1  
@@ -169,7 +193,7 @@ class Cat(Agent):
         if self.dead:
             return
         
-        # no actions when trapped
+        # no further actions when trapped
         if self.trapped:
             self.trapped = False
             return
@@ -180,4 +204,5 @@ class Cat(Agent):
             self.interact(cell_contents)
         
         self.move()
+
         self.mating -= 1 

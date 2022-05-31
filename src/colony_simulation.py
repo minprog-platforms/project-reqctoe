@@ -3,7 +3,9 @@ colony_simulation.py
 Programmeerproject
 Eline van de Lagemaat (11892900)
 
-TODO
+This file runs the created colonymodel and a webserver for 
+the visualization of the results.
+
 """
 
 import matplotlib.pyplot as plt
@@ -17,13 +19,15 @@ from Models.colony import ColonyModel
 
 
 def agent_portrayal(agent):
-    """TODO function description"""
+    """ Provide different visuals for all agents depending on properties. """
+    # general visuals
     portrayal = {"Shape": "circle",
                  "Color": "green",
                  "Filled": "true",
                  "Layer": 0,
                  "r": 0.5}
 
+    # cat alterations
     if type(agent) == Cat:
         portrayal["Color"] = "brown"
 
@@ -32,12 +36,12 @@ def agent_portrayal(agent):
 
         if agent.fertile:
             portrayal["Filled"] = "false"
-
+    # home alterations
     elif type(agent) == Home:
         portrayal["Shape"] = "rect"
         portrayal["w"] = 0.5
         portrayal["h"] = 0.5
-
+    # trap alterations
     elif type(agent) == Trap:
         portrayal["Shape"] = "rect"
         portrayal["w"] = 0.8

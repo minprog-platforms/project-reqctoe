@@ -3,7 +3,11 @@ homes.py
 Programmeerproject
 Eline van de Lagemaat (11892900)
 
-TODO
+The Trap agent class creates cat traps with a chance of trapping cats 
+in same cell every step. When a cat is trapped, it is neutered.
+
+The Home agent class can have their own trap which they occasionally move. 
+They also regularly put out food for the cats.
 """
 
 from mesa import Agent
@@ -13,7 +17,7 @@ from random import random
 
 
 class Trap(Agent):
-    """TODO agent description"""
+    """ Agent class representing traps."""
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
@@ -21,7 +25,7 @@ class Trap(Agent):
 
 
     def step(self):
-        """Trap cat agents in same cell and neuter them"""
+        """ Trap cat agents in same cell and neuter them."""
         # retrieve agents in same cell
         cell_contents = self.model.grid.get_cell_list_contents([self.pos])
         for agent in cell_contents:
@@ -34,7 +38,7 @@ class Trap(Agent):
 
 
 class Home(Agent):
-    """TODO agent description"""
+    """ Agent class representing homes."""
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
@@ -46,7 +50,7 @@ class Home(Agent):
 
 
     def move_trap(self, trap):
-        """Move traps belonging to current home"""
+        """ Move traps belonging to current home"""
         found_empty_pos = False
 
         # generate new location and check if allowed
@@ -63,7 +67,7 @@ class Home(Agent):
 
 
     def step(self):
-        """"TODO function description"""
+        """ Provide food every 5 steps and move traps."""
         self.count += 1
         # regularly put out food
         if self.count % 5 == 0:
