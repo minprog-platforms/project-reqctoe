@@ -6,13 +6,14 @@ Example: <br/>
 
 ## Problem statement
 Feral cat colonies reproduce extremely quickly and are an invasive species in most parts of the world which makes it imperative to control the number of cats in an area so they don't destroy the ecosystem they are in. 
+_Research question:_ What factors influence the number of cats to get out of hand and how can their population be minimized?
 
 <br/>
 
 ![cat collage](doc/cat-collage-2.jpg)
 
 ## Solution 
-This project will simulate a grid with cat colonies which can get food either from wildlife or human homes. Additionally, homes will be putting out traps to neuter them and minimize population growth.
+This project will simulate a grid with cat colonies which can get food either from wildlife or human homes. Additionally, homes will be putting out traps to neuter them and minimize population growth. This can provide insight into what measures should be taken in order to minimize cat population.
 
 ### Agents
 #### *Cats*
@@ -27,7 +28,9 @@ This project will simulate a grid with cat colonies which can get food either fr
   - home
   - max distance from home
   - chance of trapping (already neutered) cat -> neutering
-#### *Mice/ birds* (optional agent, can also be implemented without movement and such)
+#### *Food*
+  - ammount of food
+
 <br/>
 
 ### Description of events
