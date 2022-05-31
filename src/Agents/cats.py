@@ -164,7 +164,7 @@ class Cat(Agent):
                 possible_steps.append(step)
                 distances.append(distance)
         
-        # when cat is out of bounds, take step toward colony
+        # when cat is out of colony range, take step toward colony
         if len(possible_steps) == 0:
             # calculate direction to move in 
             direction = get_normed_diff(self.pos, self.model.colony_center)
