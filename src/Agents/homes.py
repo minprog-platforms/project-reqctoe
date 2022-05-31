@@ -13,7 +13,6 @@ They also regularly put out food for the cats.
 from mesa import Agent
 import Agents.cats as cats
 from functions import get_distance
-from random import random 
 
 
 class Trap(Agent):
@@ -21,7 +20,7 @@ class Trap(Agent):
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
-        self.chance = random()
+        self.chance = self.random.random()
 
 
     def step(self):
@@ -30,7 +29,7 @@ class Trap(Agent):
         cell_contents = self.model.grid.get_cell_list_contents([self.pos])
         for agent in cell_contents:
             # try to neuter found cats
-            if type(agent) == cats.Cat and agent.fertile and random() < self.chance:
+            if type(agent) == cats.Cat and agent.fertile and self.random.random() < self.chance:
                 agent.trapped = True
                 agent.neutered = True
                 # neuter only one cat per step
@@ -43,8 +42,7 @@ class Home(Agent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
         self.model = model
-        self.count = 0
-        self.num_food = random()*10
+        self.num_food = self.random.random()*10
         self.trap_dist = 5
         self.traps = []
 
@@ -68,11 +66,10 @@ class Home(Agent):
 
     def step(self):
         """ Provide food every 5 steps and move traps."""
-        self.count += 1
         # regularly put out food
-        if self.count % 5 == 0:
-            self.num_food += random()*100
+        if self.model.schedule.steps % 5 == 0:
+            self.num_food += self.random.random()*100
         # move traps sometimes
         for trap in self.traps:
-            if random() < 1/30:
+            if self.random.random() < 1/30:
                 self.move_trap(trap)

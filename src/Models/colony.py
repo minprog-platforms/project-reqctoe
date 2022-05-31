@@ -12,8 +12,10 @@ from mesa import Model
 from mesa.space import MultiGrid
 from mesa.time import BaseScheduler
 from mesa.datacollection import DataCollector
+from paramiko import Agent
 from Agents.homes import Home, Trap
 from Agents.cats import Cat
+from Agents.food import Food
 from functions import get_normed_diff
 from uuid import uuid4
 from random import random
@@ -22,12 +24,13 @@ from random import random
 class ColonyModel(Model):
     """ Model class representing an urban cat colony. """
 
-    def __init__(self, cats, homes, traps, width, height):
+    def __init__(self, cats, homes, traps, food, width, height):
         self.running = True
         self.colony_center = (round(width/2), round(height/2))
         self.num_cats = cats
         self.num_homes = homes
         self.max_traps = traps
+        self.food_sources = food
         self.grid = MultiGrid(width, height, True)
         self.schedule = BaseScheduler(self)
 
@@ -70,6 +73,17 @@ class ColonyModel(Model):
 
             # place cats at center
             self.grid.place_agent(cat,(self.colony_center))
+
+        # create randomly placed food source
+        for _ in range(self.food_sources):
+            ammount = self.random.random()
+            food_source = Food(uuid4(), self, ammount)
+            self.schedule.add(food_source)
+
+            x = self.random.randrange(self.grid.width)
+            y = self.random.randrange(self.grid.height)
+
+            self.grid.place_agent(food_source, (x,y))
 
 
     def move_colony(self, pos):

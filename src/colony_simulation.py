@@ -14,6 +14,7 @@ from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
 
 from Agents.cats import Cat
+from Agents.food import Food
 from Agents.homes import Home, Trap
 from Models.colony import ColonyModel
 
@@ -37,6 +38,9 @@ def agent_portrayal(agent):
         if agent.fertile:
             portrayal["Filled"] = "false"
     # home alterations
+    elif type(agent) == Food:
+        portrayal["Color"] = "grey"
+        portrayal["r"] = 0.2
     elif type(agent) == Home:
         portrayal["Shape"] = "rect"
         portrayal["w"] = 0.5
@@ -58,9 +62,10 @@ if __name__ == "__main__":
     width = 30
     height = 30
     params = {
-        "cats": 40,
+        "cats": 15,
         "homes": 75,
         "traps": 2,
+        "food": 100,
         "width": width,
         "height": height,
     }

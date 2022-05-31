@@ -18,6 +18,7 @@ Probabilities used in this file do not have a logical basis, simply what worked 
 
 from mesa import Agent
 import Agents.homes as homes
+import Agents.food as food
 from functions import get_distance, get_normed_diff
 from statistics import NormalDist
 from uuid import uuid4
@@ -114,6 +115,9 @@ class Cat(Agent):
         """ When multiple agents are in a cell, cats can interact with them."""
         # iterate through agents in cell
         for agent in agents:
+            if type(agent) == food.Food:
+                agent.move()
+                self.hunger -= agent.ammount
             # when at location of home, try to eat something
             if type(agent) == homes.Home:
                 # check if food available
