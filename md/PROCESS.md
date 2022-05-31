@@ -1,5 +1,5 @@
 # Process
-Deze file beschrijft mijn voortgang tijdens het project
+Deze file beschrijft mijn voortgang tijdens het project.
 
 
 ### Week 16
@@ -25,7 +25,8 @@ gecorrigeerde normalDist walk
 
 ### Week 22
 _final product deadline_
-laatste functionality
-cleanup
-code review
+- laatste functionality
+- cleanup
+- code review
+- new agent alert! Randomly placed food sources.
 
