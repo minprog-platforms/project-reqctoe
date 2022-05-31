@@ -12,13 +12,11 @@ from mesa import Model
 from mesa.space import MultiGrid
 from mesa.time import BaseScheduler
 from mesa.datacollection import DataCollector
-from paramiko import Agent
 from Agents.homes import Home, Trap
 from Agents.cats import Cat
 from Agents.food import Food
 from functions import get_normed_diff
 from uuid import uuid4
-from random import random
 
 
 class ColonyModel(Model):
@@ -32,6 +30,9 @@ class ColonyModel(Model):
         self.max_traps = traps
         self.food_sources = food
         self.grid = MultiGrid(width, height, True)
+    
+        self.birth = 0
+        self.death = 0
         self.schedule = BaseScheduler(self)
 
         for _ in range(self.num_homes):
@@ -52,6 +53,9 @@ class ColonyModel(Model):
             # place home in found empty spot
             self.grid.place_agent(home,(x,y))
             
+            # allow for no traps in model
+            if self.max_traps == 0:
+                continue
             # place a variable number of traps for every home
             num_traps = self.random.randrange(self.max_traps)
             for _ in range(num_traps):
@@ -60,6 +64,17 @@ class ColonyModel(Model):
 
                 self.schedule.add(trap)
                 self.grid.place_agent(trap,(x,y))
+
+        # create randomly placed food source
+        for _ in range(self.food_sources):
+            ammount = self.random.random()
+            food_source = Food(uuid4(), self, ammount)
+            self.schedule.add(food_source)
+
+            x = self.random.randrange(self.grid.width)
+            y = self.random.randrange(self.grid.height)
+
+            self.grid.place_agent(food_source, (x,y))
 
         # keep track of number of houses/traps
         self.num_noncat_agents = self.schedule.get_agent_count()
@@ -74,17 +89,43 @@ class ColonyModel(Model):
             # place cats at center
             self.grid.place_agent(cat,(self.colony_center))
 
-        # create randomly placed food source
-        for _ in range(self.food_sources):
-            ammount = self.random.random()
-            food_source = Food(uuid4(), self, ammount)
-            self.schedule.add(food_source)
+        # create list of data to keep track of
+        self.datacollector = DataCollector(model_reporters={
+            'Fertile cats': 'count_fertile',
+            'Infertile cats': 'count_infertile',
+            'Total cats': 'count_cats',
+            'Birthrate': 'birth',
+            'Deathrate': 'death'})
 
-            x = self.random.randrange(self.grid.width)
-            y = self.random.randrange(self.grid.height)
 
-            self.grid.place_agent(food_source, (x,y))
+    @property
+    def count_fertile(self):
+        """ Calculate number of fertile cats."""
+        agents = self.schedule.agents
+        n = 0
+        # filter agents for cats and check fertility
+        for agent in agents:
+            if type(agent) == Cat and agent.fertile:
+                n += 1
+        return n
+    
 
+    @property
+    def count_infertile(self):
+        """ Calculate number of infertile cats."""
+        agents = self.schedule.agents
+        n = 0
+        # filter agents for cats and check fertility
+        for agent in agents:
+            if type(agent) == Cat and not agent.fertile:
+                n += 1
+        return n
+
+    @property
+    def count_cats(self):
+        """ Calculate total number of cats."""
+        return self.schedule.get_agent_count() - self.num_noncat_agents
+    
 
     def move_colony(self, pos):
         """ Move colony center according to found food location."""
@@ -99,8 +140,9 @@ class ColonyModel(Model):
 
     def step(self):
         """ Call on step function of all agents on grid."""
-        # self.datacollector.collect(self)
+        self.birt = self.death = 0
         self.schedule.step()
-        if not 0 < (self.schedule.get_agent_count() - self.num_noncat_agents) < 1000:
+        self.datacollector.collect(self)
+        if not 0 < (self.schedule.get_agent_count() - self.num_noncat_agents) < 2000:
             self.running = False
         print(self.schedule.get_agent_count() - self.num_noncat_agents)

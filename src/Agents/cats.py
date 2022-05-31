@@ -36,6 +36,7 @@ class Cat(Agent):
 
         self.age = age
         self.mating = 0
+
         # these parameters are altered by trap agents in homes.py
         self.trapped = False
         self.neutered = False
@@ -88,6 +89,8 @@ class Cat(Agent):
         else:
             return False
 
+        # keep track of deathrate
+        self.model.death += 1
         # kill cat
         self.model.schedule.remove(self)
         self.model.grid.remove_agent(self)
@@ -103,6 +106,8 @@ class Cat(Agent):
 
         # produce 2 to 6 kittens
         litter = choice(range(2,7))
+        # keep track of birthrate
+        self.model.birth += litter
         for _ in range(litter):
             cat = Cat(uuid4(), self.model)
 

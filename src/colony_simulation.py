@@ -11,7 +11,9 @@ the visualization of the results.
 import matplotlib.pyplot as plt
 import numpy as np
 from mesa.visualization.ModularVisualization import ModularServer
-from mesa.visualization.modules import CanvasGrid
+from mesa.visualization.TextVisualization import TextData
+from mesa.visualization.modules import CanvasGrid, ChartModule
+from mesa.visualization.UserParam import UserSettableParameter
 
 from Agents.cats import Cat
 from Agents.food import Food
@@ -37,10 +39,11 @@ def agent_portrayal(agent):
 
         if agent.fertile:
             portrayal["Filled"] = "false"
-    # home alterations
+    # food alterations
     elif type(agent) == Food:
         portrayal["Color"] = "grey"
         portrayal["r"] = 0.2
+    # home alterations
     elif type(agent) == Home:
         portrayal["Shape"] = "rect"
         portrayal["w"] = 0.5
@@ -62,10 +65,10 @@ if __name__ == "__main__":
     width = 30
     height = 30
     params = {
-        "cats": 15,
-        "homes": 75,
-        "traps": 2,
-        "food": 100,
+        "cats": UserSettableParameter('number', 'Number of cats', value = 15),
+        "homes": UserSettableParameter('number', 'Number of homes', value = 75),
+        "traps": UserSettableParameter('slider', 'Maximum number of traps per home', value = 2, min_value = 0, max_value = 5, step = 1),
+        "food": UserSettableParameter('number', 'Ammount of food in environment', value = 100) ,
         "width": width,
         "height": height,
     }
@@ -74,31 +77,24 @@ if __name__ == "__main__":
     if runmode == "server":
         grid = CanvasGrid(agent_portrayal, width, height, 500, round(500*height/width))
 
+        # visualization stats
+        fertility_graph = ChartModule([
+            {'Label': 'Fertile cats', 'Color': 'red'},
+            {'Label': 'Infertile cats', 'Color': 'grey'},
+            {'Label': 'Total cats', 'Color': 'green'}])
+            
+        population_graph = ChartModule([
+            {'Label': 'Birthrate', 'Color': 'red'},
+            {'Label': 'Deathrate', 'Color': 'grey'}])
+        
         # initialize server
         server = ModularServer(ColonyModel,
-                        [grid],
-                        "Cat Model",
+                        [grid, 
+                        fertility_graph, 
+                        population_graph],
+                        "Colony Model",
                         params)
 
         # run server
         server.port = 8521 # The default
         server.launch()
-    
-    # graph type visualisation
-    elif runmode == "standalone":
-        model = ColonyModel(**params)
-        for _ in range(100):
-            model.step()
-
-        agent_counts = np.zeros((model.grid.width, model.grid.height))
-        for cell in model.grid.coord_iter():
-            cell_content, x, y = cell
-            cell_content = [x for x in cell_content if type(x) == Cat]
-            agent_count = len(cell_content)
-            agent_counts[x][y] = agent_count
-        
-        plt.imshow(agent_counts, interpolation="nearest")
-        plt.colorbar()
-
-        plt.savefig("density.png")
-

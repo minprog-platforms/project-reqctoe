@@ -11,8 +11,8 @@ They also regularly put out food for the cats.
 """
 
 from mesa import Agent
-import Agents.cats as cats
 from functions import get_distance
+import Agents.cats as cats
 
 
 class Trap(Agent):
