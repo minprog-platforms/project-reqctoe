@@ -66,6 +66,7 @@ if __name__ == "__main__":
     height = 30
     params = {
         "cats": UserSettableParameter('number', 'Number of cats', value = 15),
+        "max_cats": UserSettableParameter('number', 'Maximum number of cats', value = 2000),
         "homes": UserSettableParameter('number', 'Number of homes', value = 75),
         "traps": UserSettableParameter('slider', 'Maximum number of traps per home', value = 2, min_value = 0, max_value = 5, step = 1),
         "food": UserSettableParameter('number', 'Ammount of food in environment', value = 100) ,

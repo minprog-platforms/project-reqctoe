@@ -23,10 +23,11 @@ from mesa.time import BaseScheduler
 class ColonyModel(Model):
     """ Model class representing an urban cat colony. """
 
-    def __init__(self, cats, homes, traps, food, width, height):
+    def __init__(self, cats, max_cats, homes, traps, food, width, height):
         self.running = True
         self.colony_center = (round(width/2), round(height/2))
         self.num_cats = cats
+        self.max_cats = max_cats
         self.num_homes = homes
         self.max_traps = traps
         self.food_sources = food
@@ -61,9 +62,10 @@ class ColonyModel(Model):
             num_traps = self.random.randrange(self.max_traps)
             for _ in range(num_traps):
                 trap = Trap(uuid4(), self)
-                home.traps.append(trap)
-
                 self.schedule.add(trap)
+
+                # place trap at location of home and add to list
+                home.traps.append(trap)
                 self.grid.place_agent(trap,(x,y))
 
         # create randomly placed food source
@@ -144,6 +146,8 @@ class ColonyModel(Model):
         self.birt = self.death = 0
         self.schedule.step()
         self.datacollector.collect(self)
-        if not 0 < (self.schedule.get_agent_count() - self.num_noncat_agents) < 2000:
+
+        # stop de run wanneer alle katten dood zijn of het maximum aantal katten is overschreden
+        if not 0 < (self.schedule.get_agent_count() - self.num_noncat_agents) < self.max_cats:
             self.running = False
         print(self.schedule.get_agent_count() - self.num_noncat_agents)
