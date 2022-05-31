@@ -1,9 +1,0 @@
-- Improved visualization
-    - plaatjes toevoegen voor de agents
-    - Chart met statistieken
-    
-- Runnen met verschillene variabelen
-- Graphs maken
-- Param sliders maken in server
-- PROCESS.md
-- ASSESSMENT.md 
