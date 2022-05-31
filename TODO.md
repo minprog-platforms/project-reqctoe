@@ -1,8 +1,0 @@
-- Code opschonen
-- Meerdere colonies
-- Moving colonies
-- Improved visualization
-    - plaatjes toevoegen voor de agents
-    - Chart met statistieken
-- Runnen met verschillene variabelen
-- Uitzoeken wat de eisen precies zijn
