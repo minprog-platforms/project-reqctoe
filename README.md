@@ -6,6 +6,7 @@ Example: <br/>
 
 ## Problem statement
 Feral cat colonies reproduce extremely quickly and are an invasive species in most parts of the world which makes it imperative to control the number of cats in an area so they don't destroy the ecosystem they are in. 
+
 _Research question:_ What factors influence the number of cats to get out of hand and how can their population be minimized?
 
 <br/>
