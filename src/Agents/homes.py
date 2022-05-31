@@ -10,8 +10,9 @@ The Home agent class can have their own trap which they occasionally move.
 They also regularly put out food for the cats.
 """
 
-from mesa import Agent
 from functions import get_distance
+from mesa import Agent
+
 import Agents.cats as cats
 
 

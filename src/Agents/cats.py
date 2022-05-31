@@ -16,13 +16,15 @@ Otherwise they gravitate towards the center.
 Probabilities used in this file do not have a logical basis, simply what worked best in trials.
 """
 
-from mesa import Agent
-import Agents.homes as homes
-import Agents.food as food
-from functions import get_distance, get_normed_diff
+from random import choice, random
 from statistics import NormalDist
 from uuid import uuid4
-from random import random, choice
+
+from functions import get_distance, get_normed_diff
+from mesa import Agent
+
+import Agents.food as food
+import Agents.homes as homes
 
 
 class Cat(Agent):
@@ -140,7 +142,7 @@ class Cat(Agent):
             elif self.fertile:
                 # when both cats are fertile, small chance of mating
                 if type(agent) == Cat and agent is not self:
-                    if agent.fertile and random() < 0.01:
+                    if agent.fertile and self.random.random() < 0.01:
                         self.make_kittens(agent)
                         return
     

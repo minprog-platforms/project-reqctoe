@@ -8,15 +8,16 @@ The model includes homes, cat traps and cats which are all called upon
 in the step function.
 """
 
-from mesa import Model
-from mesa.space import MultiGrid
-from mesa.time import BaseScheduler
-from mesa.datacollection import DataCollector
-from Agents.homes import Home, Trap
+from uuid import uuid4
+
 from Agents.cats import Cat
 from Agents.food import Food
+from Agents.homes import Home, Trap
 from functions import get_normed_diff
-from uuid import uuid4
+from mesa import Model
+from mesa.datacollection import DataCollector
+from mesa.space import MultiGrid
+from mesa.time import BaseScheduler
 
 
 class ColonyModel(Model):
