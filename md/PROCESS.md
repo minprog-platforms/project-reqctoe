@@ -41,8 +41,8 @@ _beta version deadline_
 
 ### Week 22
 _final product deadline_
-- laatste functionality
-- cleanup
-- code review
-- new agent alert! Randomly placed food sources.
+- Laatste bugs in functionaliteit eruit gehaald.
+- Cleanup en overal comments bij plaatsen.
+- Voedsel in de omgeving toegevoegd.
+- Grafiekjes toevoegen aan visualisatie.
 
