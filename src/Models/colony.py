@@ -143,7 +143,7 @@ class ColonyModel(Model):
 
     def step(self):
         """ Call on step function of all agents on grid."""
-        self.birt = self.death = 0
+        self.birth = self.death = 0
         self.schedule.step()
         self.datacollector.collect(self)
 
